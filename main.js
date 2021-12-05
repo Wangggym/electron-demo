@@ -10,6 +10,16 @@ function createWindow() {
     },
   });
 
+  win.webContents.on(
+    "select-bluetooth-device",
+    (event, deviceList, callback) => {
+      event.preventDefault();
+      if (deviceList && deviceList.length > 0) {
+        callback(deviceList[0].deviceId);
+      }
+    }
+  );
+
   win.loadFile("index.html");
 
   ipcMain.handle("dark-mode:toggle", () => {
