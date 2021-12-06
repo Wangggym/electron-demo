@@ -1,5 +1,11 @@
 const path = require("path");
-const { app, BrowserWindow, ipcMain, nativeTheme } = require("electron");
+const {
+  app,
+  BrowserWindow,
+  ipcMain,
+  nativeTheme,
+  globalShortcut,
+} = require("electron");
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -36,12 +42,19 @@ function createWindow() {
   });
 }
 
-app.whenReady().then(() => {
-  createWindow();
-  app.on("activate", function () {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+app
+  .whenReady()
+  .then(() => {
+    globalShortcut.register("Alt+CommandOrControl+I", () => {
+      console.log("Electron loves global shortcuts!");
+    });
+  })
+  .then(() => {
+    createWindow();
+    app.on("activate", function () {
+      if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    });
   });
-});
 
 app.on("window-all-closed", function () {
   if (process.platform !== "darwin") app.quit();
